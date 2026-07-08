@@ -2,7 +2,7 @@
 
 backend:
   name: github
-  repo: jason/homepage
+  repo: wang-junshi/wang-junshi.github.io
   branch: main
 
 media_folder: /public/uploads
