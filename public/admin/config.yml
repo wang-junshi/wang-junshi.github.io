@@ -1,0 +1,89 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+backend:
+  name: github
+  repo: jason/homepage
+  branch: main
+
+media_folder: /public/uploads
+public_folder: /uploads
+
+collections:
+  - name: posts
+    label: 文章
+    label_singular: 文章
+    folder: /src/content/posts
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    fields:
+      - { label: 标题, name: title, widget: string }
+      - { label: 作者, name: author, widget: string, required: false }
+      - {
+          label: 发布时间,
+          name: pubDatetime,
+          widget: datetime,
+          required: true,
+        }
+      - {
+          label: 修改时间,
+          name: modDatetime,
+          widget: datetime,
+          required: false,
+        }
+      - { label: 精选, name: featured, widget: boolean, required: false }
+      - { label: 草稿, name: draft, widget: boolean, required: false }
+      - {
+          label: 标签,
+          name: tags,
+          widget: list,
+          required: false,
+          default: ["others"],
+        }
+      - {
+          label: OG 图片,
+          name: ogImage,
+          widget: image,
+          required: false,
+        }
+      - { label: 摘要, name: description, widget: text }
+      - {
+          label: 规范链接,
+          name: canonicalURL,
+          widget: string,
+          required: false,
+        }
+      - {
+          label: 隐藏编辑链接,
+          name: hideEditPost,
+          widget: boolean,
+          required: false,
+        }
+      - {
+          label: 时区,
+          name: timezone,
+          widget: string,
+          required: false,
+          hint: "例如 Asia/Shanghai",
+        }
+      - { label: 正文, name: body, widget: markdown }
+
+  - name: pages
+    label: 页面
+    files:
+      - name: about
+        label: 关于页
+        file: /src/content/pages/about.md
+        fields:
+          - { label: 标题, name: title, widget: string }
+          - { label: 摘要, name: description, widget: text, required: false }
+          - { label: OG 图片, name: ogImage, widget: image, required: false }
+          - {
+              label: 规范链接,
+              name: canonicalURL,
+              widget: string,
+              required: false,
+            }
+          - { label: 正文, name: body, widget: markdown }
