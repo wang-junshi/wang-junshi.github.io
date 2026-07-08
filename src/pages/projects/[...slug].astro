@@ -31,8 +31,7 @@ type Props = {
 };
 
 const { project } = Astro.props;
-const { title, description, pubDatetime, category, references, tags, url } =
-  project.data;
+const { title, description, pubDatetime, category, tags, url } = project.data;
 const { Content } = await render(project);
 
 const imageSrc =
@@ -102,36 +101,6 @@ const imageSrc =
     >
       <Content />
     </article>
-
-    {
-      references.length > 0 && (
-        <section class="mt-8">
-          <h2 class="text-xl font-semibold">References</h2>
-          <ul class="mt-3 space-y-3">
-            {references.map(reference => (
-              <li>
-                {reference.url ? (
-                  <a
-                    href={reference.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    class="text-accent decoration-dashed underline-offset-4 hover:underline"
-                  >
-                    {reference.title}
-                  </a>
-                ) : (
-                  <span class="font-medium">{reference.title}</span>
-                )}
-                {reference.type && (
-                  <span class="text-muted-foreground"> · {reference.type}</span>
-                )}
-                {reference.note && <p class="mt-1">{reference.note}</p>}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )
-    }
 
     <hr class="my-8 border-dashed" />
 

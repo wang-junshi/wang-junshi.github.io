@@ -74,6 +74,10 @@ interface SocialLink {
    * Override when the default wording doesn't fit.
    */
   linkTitle?: string;
+  /** Text shown next to icon links when a page opts into visible social links. */
+  displayText?: string;
+  /** Show this link as visible text on pages that enable text social links. */
+  showText?: boolean;
 }
 
 interface ShareLink {

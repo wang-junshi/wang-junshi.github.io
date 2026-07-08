@@ -7,6 +7,8 @@ type Props = {
   title: string;
   description?: string;
   meta?: string;
+  externalUrl?: string;
+  externalLabel?: string;
   compact?: boolean;
   pubDatetime: Date;
   modDatetime?: Date | null;
@@ -19,33 +21,51 @@ const {
   title,
   description,
   meta,
+  externalUrl,
+  externalLabel = "Project Link",
   compact = false,
   pubDatetime,
   modDatetime,
   timezone,
   variant: Heading = "h2",
 } = Astro.props;
+
+const externalAttrs = externalUrl?.startsWith("http")
+  ? { target: "_blank", rel: "noreferrer" }
+  : {};
 ---
 
-<li class:list={[compact ? "my-2" : "my-6"]}>
+<li class="my-6">
   {
     compact ? (
-      <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+      <>
         <a
           href={href}
           class:list={[
-            "text-accent inline-block text-base font-medium",
+            "text-accent inline-block text-xl font-semibold sm:text-2xl",
             "decoration-dashed underline-offset-4 hover:underline",
             "focus-visible:no-underline focus-visible:underline-offset-0",
           ]}
         >
           <Heading transition:name={toTransitionName(title)}>{title}</Heading>
         </a>
-        <div class="text-muted-foreground flex flex-wrap items-center gap-x-2 text-sm">
-          <Datetime {pubDatetime} {modDatetime} {timezone} showIcon={false} />
-          {meta && <span>{meta}</span>}
+        <div class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1">
+          <Datetime {pubDatetime} {modDatetime} {timezone} />
+          {meta && <span class="text-muted-foreground text-sm">{meta}</span>}
         </div>
-      </div>
+        {externalUrl && (
+          <a
+            href={externalUrl}
+            class="text-accent mt-3 inline-block text-base font-medium decoration-dashed underline-offset-4 hover:underline"
+            {...externalAttrs}
+          >
+            {externalLabel}
+          </a>
+        )}
+        {description && (
+          <p class="mt-4 max-w-prose leading-relaxed">{description}</p>
+        )}
+      </>
     ) : (
       <>
         <a

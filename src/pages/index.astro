@@ -1,5 +1,5 @@
 ---
-import { getCollection, getEntry } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconRss from "@/assets/icons/IconRss.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
@@ -27,6 +27,9 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 
 const home = await getEntry("pages", "home");
 const homeData = home?.data;
+const renderedHome = home ? await render(home) : undefined;
+const HomeContent = renderedHome?.Content;
+const hasHomeContent = Boolean(home?.body?.trim());
 const heroTitle = homeData?.heroTitle ?? config.site.title;
 const intro = homeData?.intro?.length
   ? homeData.intro
@@ -110,11 +113,26 @@ const homePath = getRelativeLocaleUrl(locale, "");
             <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">
               {t.home.socialLinks}:
             </div>
-            <Socials />
+            <Socials showText />
           </div>
         )
       }
     </section>
+
+    {
+      HomeContent && hasHomeContent && (
+        <section id="home-content" class="border-border border-b py-8">
+          <article
+            class:list={[
+              "app-prose max-w-app",
+              "prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)",
+            ]}
+          >
+            <HomeContent />
+          </article>
+        </section>
+      )
+    }
 
     {
       featuredProjects.length > 0 && (
@@ -134,7 +152,10 @@ const homePath = getRelativeLocaleUrl(locale, "");
                 variant="h3"
                 href={getContentUrl("projects", entry.id, locale)}
                 title={entry.data.title}
+                description={entry.data.description}
                 meta={entry.data.category}
+                externalUrl={entry.data.url}
+                externalLabel="Project Link"
                 pubDatetime={entry.data.pubDatetime}
                 compact
               />

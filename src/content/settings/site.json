@@ -22,21 +22,29 @@
   "socials": [
     {
       "name": "github",
-      "url": "https://github.com/wang-junshi"
+      "url": "https://github.com/wang-junshi",
+      "linkTitle": "",
+      "displayText": "GitHub: wang-junshi",
+      "showText": true
     },
     {
       "name": "mail",
-      "url": "mailto:yourmail@example.com"
+      "url": "junshi_wang@whut.com",
+      "linkTitle": "",
+      "displayText": "Email: junshi_wang@whut.com",
+      "showText": true
     }
   ],
   "shareLinks": [
     {
       "name": "x",
-      "url": "https://x.com/intent/post?url="
+      "url": "https://x.com/intent/post?url=",
+      "linkTitle": ""
     },
     {
       "name": "mail",
-      "url": "mailto:?subject=See%20this%20post&body="
+      "url": "mailto:?subject=See%20this%20post&body=",
+      "linkTitle": ""
     }
   ]
 }

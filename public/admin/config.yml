@@ -88,12 +88,26 @@ collections:
                     whatsapp,
                     pinterest,
                   ]
-              - { label: 链接, name: url, widget: string }
+              - { label: 图标里的链接, name: url, widget: string }
               - {
                   label: 辅助标题,
                   name: linkTitle,
                   widget: string,
                   required: false,
+                }
+              - {
+                  label: 单独显示文字,
+                  name: displayText,
+                  widget: string,
+                  required: false,
+                  hint: "例如 Email: example@mail.com 或 GitHub: username",
+                }
+              - {
+                  label: 在首页显示文字链接,
+                  name: showText,
+                  widget: boolean,
+                  required: false,
+                  default: false,
                 }
           - label: 文章分享按钮
             name: shareLinks
@@ -155,7 +169,13 @@ collections:
               widget: string,
               required: false,
             }
-          - { label: 正文备注, name: body, widget: markdown, required: false }
+          - {
+              label: 自由正文,
+              name: body,
+              widget: markdown,
+              required: false,
+              hint: "这里会显示在首页模板区块下方，支持 Markdown 链接、列表、图片等。",
+            }
 
   - name: projects
     label: 项目/资料
@@ -178,21 +198,6 @@ collections:
           required: false,
           hint: "例如：网站 / 研究 / 工具 / 开源资料整理",
         }
-      - label: 参考资料/相关链接
-        name: references
-        widget: list
-        required: false
-        fields:
-          - { label: 标题, name: title, widget: string }
-          - { label: 链接, name: url, widget: string, required: false }
-          - {
-              label: 类型,
-              name: type,
-              widget: string,
-              required: false,
-              hint: "例如：文档 / 数据 / 论文 / 工具",
-            }
-          - { label: 备注, name: note, widget: text, required: false }
       - { label: 首页精选, name: featured, widget: boolean, required: false }
       - { label: 草稿, name: draft, widget: boolean, required: false }
       - { label: 标签, name: tags, widget: list, required: false }

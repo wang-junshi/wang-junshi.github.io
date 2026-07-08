@@ -52,16 +52,6 @@ const projects = defineCollection({
       description: z.string(),
       url: z.string().optional(),
       category: z.string().optional(),
-      references: z
-        .array(
-          z.object({
-            title: z.string(),
-            url: z.string().optional(),
-            type: z.string().optional(),
-            note: z.string().optional(),
-          })
-        )
-        .default([]),
       featured: z.boolean().optional(),
       draft: z.boolean().optional(),
       tags: z.array(z.string()).default([]),
