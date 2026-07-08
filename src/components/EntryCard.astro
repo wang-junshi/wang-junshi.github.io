@@ -6,6 +6,8 @@ type Props = {
   href: string;
   title: string;
   description?: string;
+  meta?: string;
+  compact?: boolean;
   pubDatetime: Date;
   modDatetime?: Date | null;
   timezone?: string;
@@ -16,6 +18,8 @@ const {
   href,
   title,
   description,
+  meta,
+  compact = false,
   pubDatetime,
   modDatetime,
   timezone,
@@ -23,19 +27,43 @@ const {
 } = Astro.props;
 ---
 
-<li class="my-6">
-  <a
-    href={href}
-    class:list={[
-      "text-accent inline-block text-lg font-medium",
-      "decoration-dashed underline-offset-4 hover:underline",
-      "focus-visible:no-underline focus-visible:underline-offset-0",
-    ]}
-  >
-    <Heading transition:name={toTransitionName(title)}>
-      {title}
-    </Heading>
-  </a>
-  <Datetime {pubDatetime} {modDatetime} {timezone} />
-  {description && <p>{description}</p>}
+<li class:list={[compact ? "my-2" : "my-6"]}>
+  {
+    compact ? (
+      <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <a
+          href={href}
+          class:list={[
+            "text-accent inline-block text-base font-medium",
+            "decoration-dashed underline-offset-4 hover:underline",
+            "focus-visible:no-underline focus-visible:underline-offset-0",
+          ]}
+        >
+          <Heading transition:name={toTransitionName(title)}>{title}</Heading>
+        </a>
+        <div class="text-muted-foreground flex flex-wrap items-center gap-x-2 text-sm">
+          <Datetime {pubDatetime} {modDatetime} {timezone} showIcon={false} />
+          {meta && <span>{meta}</span>}
+        </div>
+      </div>
+    ) : (
+      <>
+        <a
+          href={href}
+          class:list={[
+            "text-accent inline-block text-lg font-medium",
+            "decoration-dashed underline-offset-4 hover:underline",
+            "focus-visible:no-underline focus-visible:underline-offset-0",
+          ]}
+        >
+          <Heading transition:name={toTransitionName(title)}>{title}</Heading>
+        </a>
+        <div class="flex flex-wrap items-center gap-x-2">
+          <Datetime {pubDatetime} {modDatetime} {timezone} />
+          {meta && <span class="text-muted-foreground text-sm">{meta}</span>}
+        </div>
+        {description && <p>{description}</p>}
+      </>
+    )
+  }
 </li>

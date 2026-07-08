@@ -134,8 +134,9 @@ const homePath = getRelativeLocaleUrl(locale, "");
                 variant="h3"
                 href={getContentUrl("projects", entry.id, locale)}
                 title={entry.data.title}
-                description={entry.data.description}
+                meta={entry.data.category}
                 pubDatetime={entry.data.pubDatetime}
+                compact
               />
             ))}
           </ul>
