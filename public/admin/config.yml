@@ -9,6 +9,214 @@ media_folder: /public/uploads
 public_folder: /uploads
 
 collections:
+  - name: settings
+    label: 设置
+    files:
+      - name: site
+        label: 站点设置
+        file: /src/content/settings/site.json
+        format: json
+        fields:
+          - label: 网站信息
+            name: site
+            widget: object
+            fields:
+              - { label: 正式网址, name: url, widget: string }
+              - { label: 网站标题, name: title, widget: string }
+              - { label: 网站描述, name: description, widget: text }
+              - { label: 作者, name: author, widget: string }
+              - {
+                  label: 作者主页,
+                  name: profile,
+                  widget: string,
+                  required: false,
+                }
+              - {
+                  label: 默认分享图,
+                  name: ogImage,
+                  widget: string,
+                  required: false,
+                }
+              - { label: 时区, name: timezone, widget: string, required: false }
+          - label: 文章显示
+            name: posts
+            widget: object
+            fields:
+              - {
+                  label: 每页文章数,
+                  name: perPage,
+                  widget: number,
+                  value_type: int,
+                  min: 1,
+                }
+              - {
+                  label: 首页文章数,
+                  name: perIndex,
+                  widget: number,
+                  value_type: int,
+                  min: 1,
+                }
+          - label: 功能开关
+            name: features
+            widget: object
+            fields:
+              - { label: 明暗主题切换, name: lightAndDarkMode, widget: boolean }
+              - { label: 自动生成分享图, name: dynamicOgImage, widget: boolean }
+              - { label: 显示随记页, name: showArchives, widget: boolean }
+              - { label: 显示返回按钮, name: showBackButton, widget: boolean }
+              - {
+                  label: 搜索功能,
+                  name: search,
+                  widget: string,
+                  hint: "填写 pagefind；如要关闭可之后让我改成 false",
+                }
+          - label: 社交链接
+            name: socials
+            widget: list
+            fields:
+              - label: 图标
+                name: name
+                widget: select
+                options:
+                  [
+                    github,
+                    mail,
+                    linkedin,
+                    x,
+                    facebook,
+                    telegram,
+                    whatsapp,
+                    pinterest,
+                  ]
+              - { label: 链接, name: url, widget: string }
+              - {
+                  label: 辅助标题,
+                  name: linkTitle,
+                  widget: string,
+                  required: false,
+                }
+          - label: 文章分享按钮
+            name: shareLinks
+            widget: list
+            fields:
+              - label: 图标
+                name: name
+                widget: select
+                options:
+                  [x, mail, facebook, telegram, whatsapp, pinterest, linkedin]
+              - { label: 分享 URL 前缀, name: url, widget: string }
+              - {
+                  label: 辅助标题,
+                  name: linkTitle,
+                  widget: string,
+                  required: false,
+                }
+
+  - name: homepage
+    label: 首页
+    files:
+      - name: home
+        label: 首页内容
+        file: /src/content/pages/home.md
+        fields:
+          - { label: 页面标题, name: title, widget: string }
+          - {
+              label: 页面描述,
+              name: description,
+              widget: text,
+              required: false,
+            }
+          - { label: 首页大标题, name: heroTitle, widget: string }
+          - label: 首页介绍段落
+            name: intro
+            widget: list
+            field: { label: 段落, name: item, widget: text }
+          - {
+              label: 主按钮文字,
+              name: primaryLinkText,
+              widget: string,
+              required: false,
+            }
+          - {
+              label: 主按钮链接,
+              name: primaryLinkUrl,
+              widget: string,
+              required: false,
+            }
+          - {
+              label: 次按钮文字,
+              name: secondaryLinkText,
+              widget: string,
+              required: false,
+            }
+          - {
+              label: 次按钮链接,
+              name: secondaryLinkUrl,
+              widget: string,
+              required: false,
+            }
+          - { label: 正文备注, name: body, widget: markdown, required: false }
+
+  - name: projects
+    label: 项目/资料
+    label_singular: 项目/资料
+    folder: /src/content/projects
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    fields:
+      - { label: 标题, name: title, widget: string }
+      - { label: 时间, name: pubDatetime, widget: datetime, required: true }
+      - { label: 摘要, name: description, widget: text }
+      - { label: 项目链接, name: url, widget: string, required: false }
+      - {
+          label: 分类,
+          name: category,
+          widget: string,
+          required: false,
+          hint: "例如：网站 / 研究 / 工具 / 开源资料整理",
+        }
+      - label: 参考资料/相关链接
+        name: references
+        widget: list
+        required: false
+        fields:
+          - { label: 标题, name: title, widget: string }
+          - { label: 链接, name: url, widget: string, required: false }
+          - {
+              label: 类型,
+              name: type,
+              widget: string,
+              required: false,
+              hint: "例如：文档 / 数据 / 论文 / 工具",
+            }
+          - { label: 备注, name: note, widget: text, required: false }
+      - { label: 首页精选, name: featured, widget: boolean, required: false }
+      - { label: 草稿, name: draft, widget: boolean, required: false }
+      - { label: 标签, name: tags, widget: list, required: false }
+      - { label: 图片, name: image, widget: image, required: false }
+      - { label: 正文, name: body, widget: markdown }
+
+  - name: archives
+    label: 想法/记录
+    label_singular: 想法/记录
+    folder: /src/content/archives
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    fields:
+      - { label: 标题, name: title, widget: string }
+      - { label: 时间, name: pubDatetime, widget: datetime, required: true }
+      - { label: 摘要, name: description, widget: text, required: false }
+      - { label: 草稿, name: draft, widget: boolean, required: false }
+      - { label: 标签, name: tags, widget: list, required: false }
+      - { label: 图片, name: image, widget: image, required: false }
+      - { label: 正文, name: body, widget: markdown }
+
   - name: posts
     label: 文章
     label_singular: 文章
@@ -21,12 +229,7 @@ collections:
     fields:
       - { label: 标题, name: title, widget: string }
       - { label: 作者, name: author, widget: string, required: false }
-      - {
-          label: 发布时间,
-          name: pubDatetime,
-          widget: datetime,
-          required: true,
-        }
+      - { label: 发布时间, name: pubDatetime, widget: datetime, required: true }
       - {
           label: 修改时间,
           name: modDatetime,
@@ -40,21 +243,11 @@ collections:
           name: tags,
           widget: list,
           required: false,
-          default: ["others"],
+          default: [others],
         }
-      - {
-          label: OG 图片,
-          name: ogImage,
-          widget: image,
-          required: false,
-        }
+      - { label: OG 图片, name: ogImage, widget: image, required: false }
       - { label: 摘要, name: description, widget: text }
-      - {
-          label: 规范链接,
-          name: canonicalURL,
-          widget: string,
-          required: false,
-        }
+      - { label: 规范链接, name: canonicalURL, widget: string, required: false }
       - {
           label: 隐藏编辑链接,
           name: hideEditPost,
@@ -69,21 +262,3 @@ collections:
           hint: "例如 Asia/Shanghai",
         }
       - { label: 正文, name: body, widget: markdown }
-
-  - name: pages
-    label: 页面
-    files:
-      - name: about
-        label: 关于页
-        file: /src/content/pages/about.md
-        fields:
-          - { label: 标题, name: title, widget: string }
-          - { label: 摘要, name: description, widget: text, required: false }
-          - { label: OG 图片, name: ogImage, widget: image, required: false }
-          - {
-              label: 规范链接,
-              name: canonicalURL,
-              widget: string,
-              required: false,
-            }
-          - { label: 正文, name: body, widget: markdown }

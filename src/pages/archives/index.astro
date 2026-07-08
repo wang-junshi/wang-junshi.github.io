@@ -1,20 +1,17 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Main from "@/components/Main.astro";
 import Footer from "@/components/Footer.astro";
-import Card from "@/components/Card.astro";
-import { postFilter } from "@/utils/postFilter";
-import { getPostsByGroupCondition } from "./_utils/getPostsByGroupCondition";
+import Datetime from "@/components/Datetime.astro";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
 const locale = Astro.currentLocale ?? config.site.lang;
 
-// Redirect to 404 page if `showArchives` config is false
 const notFoundUrl = getRelativeLocaleUrl(locale, "404");
 if (!config.features.showArchives && notFoundUrl) {
   return Astro.rewrite(notFoundUrl);
@@ -22,9 +19,21 @@ if (!config.features.showArchives && notFoundUrl) {
 
 const t = useTranslations(locale);
 
-const posts = await getCollection("posts");
-const filteredPosts = posts.filter(postFilter);
+const entries = (await getCollection("archives"))
+  .filter(({ data }) => !data.draft)
+  .sort((a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime());
+
+const items = await Promise.all(
+  entries.map(async entry => ({
+    entry,
+    Content: (await render(entry)).Content,
+  }))
+);
+
 const monthFormatter = new Intl.DateTimeFormat(locale, { month: "long" });
+const years = Array.from(
+  new Set(items.map(({ entry }) => entry.data.pubDatetime.getFullYear()))
+).sort((a, b) => b - a);
 ---
 
 <Layout title={`${t.pages.archivesTitle} | ${config.site.title}`}>
@@ -34,54 +43,66 @@ const monthFormatter = new Intl.DateTimeFormat(locale, { month: "long" });
 
   <Main pageTitle={t.pages.archivesTitle} pageDesc={t.pages.archivesDesc}>
     {
-      Object.entries(
-        getPostsByGroupCondition(filteredPosts, post =>
-          post.data.pubDatetime.getFullYear()
-        )
-      )
-        .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
-        .map(([year, yearGroup]) => (
-          <div>
-            <span class="text-2xl font-bold">{year}</span>
-            <sup class="text-muted-foreground text-sm">{yearGroup.length}</sup>
-            {Object.entries(
-              getPostsByGroupCondition(
-                yearGroup,
-                post => post.data.pubDatetime.getMonth() + 1
-              )
+      items.length === 0 ? (
+        <p>还没有随记。之后可以在 Sveltia CMS 里新增想法、记录和近况。</p>
+      ) : (
+        years.map(year => {
+          const yearItems = items.filter(
+            ({ entry }) => entry.data.pubDatetime.getFullYear() === year
+          );
+          const months = Array.from(
+            new Set(
+              yearItems.map(({ entry }) => entry.data.pubDatetime.getMonth())
             )
-              .sort(([monthA], [monthB]) => Number(monthB) - Number(monthA))
-              .map(([month, monthGroup]) => (
-                <div class="flex flex-col sm:flex-row">
-                  <div class="mt-6 min-w-36 text-lg sm:my-6">
-                    <span class="font-bold">
-                      {monthFormatter.format(
-                        new Date(2000, Number(month) - 1, 1)
-                      )}
-                    </span>
-                    <sup class="text-muted-foreground text-xs">
-                      {monthGroup.length}
-                    </sup>
-                  </div>
-                  <ul>
-                    {monthGroup
-                      .sort(
-                        (a, b) =>
-                          Math.floor(
-                            new Date(b.data.pubDatetime).getTime() / 1000
-                          ) -
-                          Math.floor(
-                            new Date(a.data.pubDatetime).getTime() / 1000
-                          )
-                      )
-                      .map(data => (
-                        <Card {...data} />
+          ).sort((a, b) => b - a);
+
+          return (
+            <div>
+              <span class="text-2xl font-bold">{year}</span>
+              <sup class="text-muted-foreground text-sm">
+                {yearItems.length}
+              </sup>
+              {months.map(month => {
+                const monthItems = yearItems.filter(
+                  ({ entry }) => entry.data.pubDatetime.getMonth() === month
+                );
+
+                return (
+                  <div class="flex flex-col sm:flex-row">
+                    <div class="mt-6 min-w-36 text-lg sm:my-6">
+                      <span class="font-bold">
+                        {monthFormatter.format(new Date(2000, month, 1))}
+                      </span>
+                      <sup class="text-muted-foreground text-xs">
+                        {monthItems.length}
+                      </sup>
+                    </div>
+                    <ul class="w-full">
+                      {monthItems.map(({ entry, Content }) => (
+                        <li
+                          id={entry.id}
+                          class="border-border scroll-mt-24 border-b py-6 last:border-b-0"
+                        >
+                          <h2 class="text-accent text-lg font-medium">
+                            {entry.data.title}
+                          </h2>
+                          <Datetime pubDatetime={entry.data.pubDatetime} />
+                          {entry.data.description && (
+                            <p>{entry.data.description}</p>
+                          )}
+                          <div class="app-prose mt-4">
+                            <Content />
+                          </div>
+                        </li>
                       ))}
-                  </ul>
-                </div>
-              ))}
-          </div>
-        ))
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })
+      )
     }
   </Main>
 

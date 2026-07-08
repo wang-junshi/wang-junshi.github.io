@@ -1,0 +1,59 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run: Website preview with npm",
+      "type": "shell",
+      "command": "npm run dev",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "homepage"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Run: Build check with npm",
+      "type": "shell",
+      "command": "npm run build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "homepage"
+      },
+      "group": "build"
+    },
+    {
+      "label": "Open: Local website",
+      "type": "shell",
+      "command": "open -a 'Google Chrome' http://localhost:4321/",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Open: Sveltia CMS",
+      "type": "shell",
+      "command": "open -a 'Google Chrome' http://localhost:4321/admin/index.html",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Git: Push updates",
+      "type": "shell",
+      "command": "git push",
+      "problemMatcher": []
+    }
+  ]
+}

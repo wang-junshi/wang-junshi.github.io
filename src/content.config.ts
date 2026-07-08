@@ -29,9 +29,60 @@ const pages = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
+    heroTitle: z.string().optional(),
+    intro: z.array(z.string()).optional(),
+    primaryLinkText: z.string().optional(),
+    primaryLinkUrl: z.string().optional(),
+    secondaryLinkText: z.string().optional(),
+    secondaryLinkUrl: z.string().optional(),
     ogImage: z.string().optional(),
     canonicalURL: z.string().optional(),
   }),
 });
 
-export const collections = { posts, pages };
+const projects = defineCollection({
+  loader: glob({
+    pattern: "**/[^_]*.{md,mdx}",
+    base: "./src/content/projects",
+  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      pubDatetime: z.date(),
+      description: z.string(),
+      url: z.string().optional(),
+      category: z.string().optional(),
+      references: z
+        .array(
+          z.object({
+            title: z.string(),
+            url: z.string().optional(),
+            type: z.string().optional(),
+            note: z.string().optional(),
+          })
+        )
+        .default([]),
+      featured: z.boolean().optional(),
+      draft: z.boolean().optional(),
+      tags: z.array(z.string()).default([]),
+      image: image().or(z.string()).optional(),
+    }),
+});
+
+const archives = defineCollection({
+  loader: glob({
+    pattern: "**/[^_]*.{md,mdx}",
+    base: "./src/content/archives",
+  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      pubDatetime: z.date(),
+      description: z.string().optional(),
+      draft: z.boolean().optional(),
+      tags: z.array(z.string()).default([]),
+      image: image().or(z.string()).optional(),
+    }),
+});
+
+export const collections = { posts, pages, projects, archives };
