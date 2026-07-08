@@ -8,9 +8,10 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Socials from "@/components/Socials.astro";
 import Card from "@/components/Card.astro";
+import EntryCard from "@/components/EntryCard.astro";
 import LinkButton from "@/components/LinkButton.astro";
-import Datetime from "@/components/Datetime.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getContentUrl } from "@/utils/getContentPaths";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
@@ -123,22 +124,19 @@ const homePath = getRelativeLocaleUrl(locale, "");
               {t.nav.projects}
             </h2>
             <LinkButton href={getRelativeLocaleUrl(locale, "projects")}>
-              全部项目
+              All Projects
               <IconArrowRight class="inline-block rtl:-rotate-180" />
             </LinkButton>
           </div>
           <ul>
-            {featuredProjects.slice(0, 3).map(({ data }) => (
-              <li class="my-6">
-                <a
-                  href={data.url ?? getRelativeLocaleUrl(locale, "projects")}
-                  class="text-accent inline-block text-lg font-medium decoration-dashed underline-offset-4 hover:underline"
-                >
-                  <h3>{data.title}</h3>
-                </a>
-                <Datetime pubDatetime={data.pubDatetime} />
-                <p>{data.description}</p>
-              </li>
+            {featuredProjects.slice(0, 3).map(entry => (
+              <EntryCard
+                variant="h3"
+                href={getContentUrl("projects", entry.id, locale)}
+                title={entry.data.title}
+                description={entry.data.description}
+                pubDatetime={entry.data.pubDatetime}
+              />
             ))}
           </ul>
         </section>
@@ -153,26 +151,19 @@ const homePath = getRelativeLocaleUrl(locale, "");
               {t.nav.archives}
             </h2>
             <LinkButton href={getRelativeLocaleUrl(locale, "archives")}>
-              全部{t.nav.archives}
+              All Archives
               <IconArrowRight class="inline-block rtl:-rotate-180" />
             </LinkButton>
           </div>
           <ul>
-            {archives.slice(0, 4).map(({ id, data }) => (
-              <li class="my-6">
-                <a
-                  href={
-                    getRelativeLocaleUrl(locale, "archives") +
-                    "#" +
-                    encodeURIComponent(id)
-                  }
-                  class="text-accent inline-block text-lg font-medium decoration-dashed underline-offset-4 hover:underline"
-                >
-                  <h3>{data.title}</h3>
-                </a>
-                <Datetime pubDatetime={data.pubDatetime} />
-                <p>{data.description}</p>
-              </li>
+            {archives.slice(0, 4).map(entry => (
+              <EntryCard
+                variant="h3"
+                href={getContentUrl("archives", entry.id, locale)}
+                title={entry.data.title}
+                description={entry.data.description}
+                pubDatetime={entry.data.pubDatetime}
+              />
             ))}
           </ul>
         </section>

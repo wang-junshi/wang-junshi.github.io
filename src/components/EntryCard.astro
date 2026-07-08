@@ -1,0 +1,41 @@
+---
+import Datetime from "./Datetime.astro";
+import { toTransitionName } from "@/utils/toTransitionName";
+
+type Props = {
+  href: string;
+  title: string;
+  description?: string;
+  pubDatetime: Date;
+  modDatetime?: Date | null;
+  timezone?: string;
+  variant?: "h2" | "h3";
+};
+
+const {
+  href,
+  title,
+  description,
+  pubDatetime,
+  modDatetime,
+  timezone,
+  variant: Heading = "h2",
+} = Astro.props;
+---
+
+<li class="my-6">
+  <a
+    href={href}
+    class:list={[
+      "text-accent inline-block text-lg font-medium",
+      "decoration-dashed underline-offset-4 hover:underline",
+      "focus-visible:no-underline focus-visible:underline-offset-0",
+    ]}
+  >
+    <Heading transition:name={toTransitionName(title)}>
+      {title}
+    </Heading>
+  </a>
+  <Datetime {pubDatetime} {modDatetime} {timezone} />
+  {description && <p>{description}</p>}
+</li>

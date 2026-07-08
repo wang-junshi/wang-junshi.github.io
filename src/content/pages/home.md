@@ -1,14 +1,14 @@
 ---
 title: "Home"
-description: "Junshi Wang 的个人主页，用来整理项目/资料、文章和想法记录。"
+description: "Junshi Wang's personal homepage for projects, resources, posts, and records."
 heroTitle: "Junshi Wang"
 intro:
-  - "这里是我的个人主页，用来整理长期积累的项目/资料、文章和随手记录。"
-  - "目前网站还在搭建中，内容会逐步从模板示例替换成自己的记录。"
-primaryLinkText: "查看项目/资料"
+  - "A personal homepage for projects, resources, long-form posts, and ongoing records."
+  - "This site is still taking shape and will gradually replace template examples with my own work."
+primaryLinkText: "View Projects"
 primaryLinkUrl: "/projects/"
-secondaryLinkText: "查看随记"
+secondaryLinkText: "View Archives"
 secondaryLinkUrl: "/archives/"
 ---
 
-你可以在 Sveltia CMS 的“首页”里编辑这段内容。
+You can edit this homepage content in Sveltia CMS.

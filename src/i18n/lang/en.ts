@@ -2,12 +2,12 @@ import type { UIStrings } from "../types";
 
 export default {
   nav: {
-    home: "首页",
-    posts: "文章",
-    projects: "项目",
-    tags: "标签",
-    archives: "随记",
-    search: "搜索",
+    home: "Home",
+    posts: "Posts",
+    projects: "Projects",
+    tags: "Tags",
+    archives: "Archives",
+    search: "Search",
   },
   post: {
     publishedAt: "Published at",
@@ -28,30 +28,30 @@ export default {
     page: "Page",
   },
   home: {
-    socialLinks: "社交链接",
-    featured: "精选文章",
-    recentPosts: "最近文章",
-    allPosts: "全部文章",
+    socialLinks: "Social Links",
+    featured: "Featured Posts",
+    recentPosts: "Recent Posts",
+    allPosts: "All Posts",
   },
   footer: {
     copyright: "Copyright",
     allRightsReserved: "All rights reserved.",
   },
   pages: {
-    tagTitle: "标签",
-    tagDesc: "包含这个标签的内容：",
+    tagTitle: "Tag",
+    tagDesc: "Content tagged with",
 
-    tagsTitle: "标签",
-    tagsDesc: "项目、文章和随记里使用过的标签。",
+    tagsTitle: "Tags",
+    tagsDesc: "Tags used across projects, posts, and archives.",
 
-    postsTitle: "文章",
-    postsDesc: "整理后的长文章。",
+    postsTitle: "Posts",
+    postsDesc: "Long-form writing and organized notes.",
 
-    archivesTitle: "随记",
-    archivesDesc: "随手记录想法、近况和过程。",
+    archivesTitle: "Archives",
+    archivesDesc: "Thoughts, records, and casual updates.",
 
-    searchTitle: "搜索",
-    searchDesc: "搜索站内内容 ...",
+    searchTitle: "Search",
+    searchDesc: "Search the site ...",
   },
   a11y: {
     skipToContent: "Skip to content",

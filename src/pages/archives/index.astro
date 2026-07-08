@@ -1,12 +1,13 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Main from "@/components/Main.astro";
 import Footer from "@/components/Footer.astro";
-import Datetime from "@/components/Datetime.astro";
+import EntryCard from "@/components/EntryCard.astro";
+import { getContentUrl } from "@/utils/getContentPaths";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
@@ -23,16 +24,9 @@ const entries = (await getCollection("archives"))
   .filter(({ data }) => !data.draft)
   .sort((a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime());
 
-const items = await Promise.all(
-  entries.map(async entry => ({
-    entry,
-    Content: (await render(entry)).Content,
-  }))
-);
-
 const monthFormatter = new Intl.DateTimeFormat(locale, { month: "long" });
 const years = Array.from(
-  new Set(items.map(({ entry }) => entry.data.pubDatetime.getFullYear()))
+  new Set(entries.map(entry => entry.data.pubDatetime.getFullYear()))
 ).sort((a, b) => b - a);
 ---
 
@@ -43,17 +37,15 @@ const years = Array.from(
 
   <Main pageTitle={t.pages.archivesTitle} pageDesc={t.pages.archivesDesc}>
     {
-      items.length === 0 ? (
-        <p>还没有随记。之后可以在 Sveltia CMS 里新增想法、记录和近况。</p>
+      entries.length === 0 ? (
+        <p>No archive entries yet.</p>
       ) : (
         years.map(year => {
-          const yearItems = items.filter(
-            ({ entry }) => entry.data.pubDatetime.getFullYear() === year
+          const yearItems = entries.filter(
+            entry => entry.data.pubDatetime.getFullYear() === year
           );
           const months = Array.from(
-            new Set(
-              yearItems.map(({ entry }) => entry.data.pubDatetime.getMonth())
-            )
+            new Set(yearItems.map(entry => entry.data.pubDatetime.getMonth()))
           ).sort((a, b) => b - a);
 
           return (
@@ -64,7 +56,7 @@ const years = Array.from(
               </sup>
               {months.map(month => {
                 const monthItems = yearItems.filter(
-                  ({ entry }) => entry.data.pubDatetime.getMonth() === month
+                  entry => entry.data.pubDatetime.getMonth() === month
                 );
 
                 return (
@@ -78,22 +70,13 @@ const years = Array.from(
                       </sup>
                     </div>
                     <ul class="w-full">
-                      {monthItems.map(({ entry, Content }) => (
-                        <li
-                          id={entry.id}
-                          class="border-border scroll-mt-24 border-b py-6 last:border-b-0"
-                        >
-                          <h2 class="text-accent text-lg font-medium">
-                            {entry.data.title}
-                          </h2>
-                          <Datetime pubDatetime={entry.data.pubDatetime} />
-                          {entry.data.description && (
-                            <p>{entry.data.description}</p>
-                          )}
-                          <div class="app-prose mt-4">
-                            <Content />
-                          </div>
-                        </li>
+                      {monthItems.map(entry => (
+                        <EntryCard
+                          href={getContentUrl("archives", entry.id, locale)}
+                          title={entry.data.title}
+                          description={entry.data.description}
+                          pubDatetime={entry.data.pubDatetime}
+                        />
                       ))}
                     </ul>
                   </div>

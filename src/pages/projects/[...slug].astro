@@ -1,0 +1,145 @@
+---
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import PostLayout from "@/layouts/PostLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Datetime from "@/components/Datetime.astro";
+import Tag from "@/components/Tag.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import { getContentSlug } from "@/utils/getContentPaths";
+import { slugifyStr } from "@/utils/slugify";
+import { toTransitionName } from "@/utils/toTransitionName";
+import BackButton from "@/pages/posts/[...slug]/_components/BackButton.astro";
+import BackToTopButton from "@/pages/posts/[...slug]/_components/BackToTopButton.astro";
+import config from "@/config";
+
+export async function getStaticPaths() {
+  const projects = (await getCollection("projects"))
+    .filter(({ data }) => !data.draft)
+    .sort(
+      (a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime()
+    );
+
+  return projects.map(project => ({
+    params: { slug: getContentSlug(project.id) },
+    props: { project },
+  }));
+}
+
+type Props = {
+  project: CollectionEntry<"projects">;
+};
+
+const { project } = Astro.props;
+const { title, description, pubDatetime, category, references, tags, url } =
+  project.data;
+const { Content } = await render(project);
+
+const imageSrc =
+  typeof project.data.image === "string"
+    ? project.data.image
+    : project.data.image?.src;
+---
+
+<PostLayout
+  title={`${title} | ${config.site.title}`}
+  description={description}
+  pubDatetime={pubDatetime}
+>
+  <Header />
+
+  <BackButton />
+
+  <main
+    id="main-content"
+    class:list={["app-layout", { "mt-8": !config.features.showBackButton }]}
+    data-pagefind-body
+  >
+    <h1
+      style={{ viewTransitionName: toTransitionName(title) }}
+      class="text-accent inline-block text-2xl font-bold sm:text-3xl"
+    >
+      {title}
+    </h1>
+
+    <div class="my-2 flex flex-wrap items-center gap-2">
+      <Datetime {pubDatetime} size="lg" />
+      {
+        category && (
+          <span class="text-muted-foreground text-sm">{category}</span>
+        )
+      }
+    </div>
+
+    {
+      url && (
+        <LinkButton
+          href={url}
+          class="text-accent underline decoration-dashed underline-offset-4"
+        >
+          Project Link
+        </LinkButton>
+      )
+    }
+
+    {
+      imageSrc && (
+        <img
+          src={imageSrc}
+          alt=""
+          class="mt-8 aspect-video w-full object-cover"
+        />
+      )
+    }
+
+    <article
+      id="article"
+      class:list={[
+        "mt-8 w-full",
+        "app-prose max-w-app",
+        "prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)",
+      ]}
+    >
+      <Content />
+    </article>
+
+    {
+      references.length > 0 && (
+        <section class="mt-8">
+          <h2 class="text-xl font-semibold">References</h2>
+          <ul class="mt-3 space-y-3">
+            {references.map(reference => (
+              <li>
+                {reference.url ? (
+                  <a
+                    href={reference.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    class="text-accent decoration-dashed underline-offset-4 hover:underline"
+                  >
+                    {reference.title}
+                  </a>
+                ) : (
+                  <span class="font-medium">{reference.title}</span>
+                )}
+                {reference.type && (
+                  <span class="text-muted-foreground"> · {reference.type}</span>
+                )}
+                {reference.note && <p class="mt-1">{reference.note}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <hr class="my-8 border-dashed" />
+
+    <BackToTopButton />
+
+    <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8">
+      {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />)}
+    </ul>
+  </main>
+  <Footer />
+</PostLayout>

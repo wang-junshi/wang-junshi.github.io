@@ -1,6 +1,5 @@
 ---
 import { getCollection } from "astro:content";
-import { getRelativeLocaleUrl } from "astro:i18n";
 import type { GetStaticPathsOptions } from "astro";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
@@ -10,6 +9,7 @@ import Footer from "@/components/Footer.astro";
 import Pagination from "@/components/Pagination.astro";
 import Datetime from "@/components/Datetime.astro";
 import { getUniqueTags } from "@/utils/getUniqueTags";
+import { getContentUrl } from "@/utils/getContentPaths";
 import { getPostUrl } from "@/utils/getPostPaths";
 import { postFilter } from "@/utils/postFilter";
 import { slugifyAll } from "@/utils/slugify";
@@ -90,10 +90,8 @@ const kindLabels: Record<TaggedItem["kind"], string> = {
 
 const getItemUrl = (item: TaggedItem) => {
   if (item.kind === "post") return getPostUrl(item.id, item.filePath, locale);
-  const basePath = item.kind === "project" ? "projects" : "archives";
-  return (
-    getRelativeLocaleUrl(locale, basePath) + "#" + encodeURIComponent(item.id)
-  );
+  const section = item.kind === "project" ? "projects" : "archives";
+  return getContentUrl(section, item.id, locale);
 };
 ---
 

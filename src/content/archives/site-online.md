@@ -1,10 +1,12 @@
 ---
-title: "网站上线记录"
+title: Site launch note
 pubDatetime: 2026-07-08T00:00:00+08:00
-description: "个人主页已经完成基础搭建，开始进入内容整理阶段。"
+description: The personal homepage is online and ready for content cleanup.
 draft: false
 tags:
   - site
 ---
 
-网站已经可以通过 GitHub Pages 访问。下一步会逐步整理项目/资料、文章和随手记录，让它从模板站变成真正的个人主页。
+The site is now available through GitHub Pages. The next step is to replace template content with real projects, posts, and records.
+
+![](/uploads/%E6%8F%90%E5%8F%96%E8%87%AACertificate_of_Acceptance_of_MSS_0554_hOQn9VP%281%29%281%29.png)
