@@ -23,16 +23,12 @@
     {
       "name": "github",
       "url": "https://github.com/wang-junshi",
-      "linkTitle": "",
-      "displayText": "GitHub: wang-junshi",
-      "showText": true
+      "linkTitle": ""
     },
     {
       "name": "mail",
       "url": "junshi_wang@whut.com",
-      "linkTitle": "",
-      "displayText": "Email: junshi_wang@whut.com",
-      "showText": true
+      "linkTitle": ""
     }
   ],
   "shareLinks": [

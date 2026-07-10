@@ -84,36 +84,13 @@ const homePath = getRelativeLocaleUrl(locale, "");
 
       {intro.map(item => <p class="mt-2">{item}</p>)}
 
-      <div class="mt-5 flex flex-wrap gap-3">
-        {
-          homeData?.primaryLinkText && homeData?.primaryLinkUrl && (
-            <LinkButton
-              class="hover:text-accent underline decoration-dashed underline-offset-4"
-              href={homeData.primaryLinkUrl}
-            >
-              {homeData.primaryLinkText}
-            </LinkButton>
-          )
-        }
-        {
-          homeData?.secondaryLinkText && homeData?.secondaryLinkUrl && (
-            <LinkButton
-              class="hover:text-accent underline decoration-dashed underline-offset-4"
-              href={homeData.secondaryLinkUrl}
-            >
-              {homeData.secondaryLinkText}
-            </LinkButton>
-          )
-        }
-      </div>
-
       {
         socials.length > 0 && (
           <div class="mt-4 flex max-sm:flex-col sm:items-center">
             <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">
               {t.home.socialLinks}:
             </div>
-            <Socials showText />
+            <Socials />
           </div>
         )
       }

@@ -95,20 +95,6 @@ collections:
                   widget: string,
                   required: false,
                 }
-              - {
-                  label: 单独显示文字,
-                  name: displayText,
-                  widget: string,
-                  required: false,
-                  hint: "例如 Email: example@mail.com 或 GitHub: username",
-                }
-              - {
-                  label: 在首页显示文字链接,
-                  name: showText,
-                  widget: boolean,
-                  required: false,
-                  default: false,
-                }
           - label: 文章分享按钮
             name: shareLinks
             widget: list
@@ -145,30 +131,6 @@ collections:
             name: intro
             widget: list
             field: { label: 段落, name: item, widget: text }
-          - {
-              label: 主按钮文字,
-              name: primaryLinkText,
-              widget: string,
-              required: false,
-            }
-          - {
-              label: 主按钮链接,
-              name: primaryLinkUrl,
-              widget: string,
-              required: false,
-            }
-          - {
-              label: 次按钮文字,
-              name: secondaryLinkText,
-              widget: string,
-              required: false,
-            }
-          - {
-              label: 次按钮链接,
-              name: secondaryLinkUrl,
-              widget: string,
-              required: false,
-            }
           - {
               label: 自由正文,
               name: body,

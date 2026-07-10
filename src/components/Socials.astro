@@ -2,11 +2,6 @@
 import config from "@/config";
 import LinkButton from "./LinkButton.astro";
 
-type Props = {
-  showText?: boolean;
-};
-
-const { showText = false } = Astro.props;
 const { site, socials } = config;
 
 const icons = import.meta.glob<{
@@ -24,27 +19,6 @@ function normalizeUrl(name: string, url: string) {
   return trimmed;
 }
 
-function mailDisplay(url: string) {
-  return url
-    .replace(/^mailto:/i, "")
-    .replace(/[?#].*$/, "")
-    .trim();
-}
-
-function compactUrlDisplay(url: string) {
-  try {
-    const parsed = new URL(url);
-    return `${parsed.hostname}${parsed.pathname}`.replace(/\/$/, "");
-  } catch {
-    return url;
-  }
-}
-
-function defaultDisplayText(name: string, url: string) {
-  if (isMail(name, url)) return `Email: ${mailDisplay(url)}`;
-  return compactUrlDisplay(url);
-}
-
 function defaultTitle(name: string, href: string) {
   return isMail(name, href)
     ? `Send an email to ${site.title}`
@@ -53,55 +27,29 @@ function defaultTitle(name: string, href: string) {
 
 const items = (
   await Promise.all(
-    socials.map(async ({ name, url, linkTitle, displayText, showText }) => {
+    socials.map(async ({ name, url, linkTitle }) => {
       const href = normalizeUrl(name, url);
       if (!href) return null;
 
       const mod = await icons[`/src/assets/icons/socials/${name}.svg`]?.();
       const Icon = mod?.default;
       const title = linkTitle?.trim() || defaultTitle(name, href);
-      const text = displayText?.trim() || defaultDisplayText(name, href);
 
-      return { href, title, Icon, displayText: text, showText };
+      return { href, title, Icon };
     })
   )
 ).filter(item => item !== null);
-
-const textItems = showText
-  ? items.filter(item => item.showText && item.displayText)
-  : [];
 ---
 
-<div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-  <div class="flex flex-wrap items-center gap-1">
-    {
-      items.map(({ href, title, Icon }) =>
-        Icon ? (
-          <LinkButton
-            href={href}
-            class="p-2 hover:rotate-6 sm:p-1"
-            title={title}
-          >
-            <Icon class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" />
-            <span class="sr-only">{title}</span>
-          </LinkButton>
-        ) : null
-      )
-    }
-  </div>
-
+<div class="flex flex-wrap items-center gap-1">
   {
-    textItems.length > 0 && (
-      <div class="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-        {textItems.map(({ href, displayText }) => (
-          <a
-            href={href}
-            class="hover:text-accent decoration-dashed underline-offset-4 hover:underline"
-          >
-            {displayText}
-          </a>
-        ))}
-      </div>
+    items.map(({ href, title, Icon }) =>
+      Icon ? (
+        <LinkButton href={href} class="p-2 hover:rotate-6 sm:p-1" title={title}>
+          <Icon class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" />
+          <span class="sr-only">{title}</span>
+        </LinkButton>
+      ) : null
     )
   }
 </div>
